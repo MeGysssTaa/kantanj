@@ -51,18 +51,4 @@ public final class CommonJson {
         return prettyGsonNoHtmlEsc.toJson(Check.notNull(obj, "obj cannot be null"));
     }
 
-    public static String unpackJsonObject(String json) {
-        json = Check.notNull(json, "json cannot be null").trim();
-
-        if (json.isEmpty())
-            throw new IllegalArgumentException("empty JSON string");
-
-        if (json.charAt(0) == '{') {
-            // A "packed" object of format { "sampleData": "sampleValue" }.
-            // Here we transform it to TODO lol
-        }
-
-        return null;
-    }
-
 }
