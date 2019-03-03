@@ -56,6 +56,17 @@ public interface HttpRequest {
     boolean shouldFollowRedirects();
 
     /**
+     * Defaults to true.
+     */
+    boolean shouldDoInput();
+
+    /**
+     * Default may vary upon implementation, e.g. false
+     * for GetHttpRequest and true for PostHttpRequest.
+     */
+    boolean shouldDoOutput();
+
+    /**
      * @throws IllegalStateException if this HttpRequest is not initialized.
      */
     String getURL() throws IllegalStateException;

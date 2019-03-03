@@ -89,9 +89,11 @@ public final class Networking {
 
                 con.setRequestProperty("User-Agent", request.getUserAgent());
                 con.setInstanceFollowRedirects(request.shouldFollowRedirects());
-
                 con.setConnectTimeout(request.getConnectTimeout());
                 con.setReadTimeout(request.getReadTimeout());
+
+                con.setDoInput(request.shouldDoInput());
+                con.setDoOutput(request.shouldDoOutput());
 
                 return con;
             } catch (Exception ex) {

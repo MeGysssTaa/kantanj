@@ -43,6 +43,7 @@ public class SimpleHttpRequest implements HttpRequest {
     private int readTimeout    = DEFAULT_READ_TIMEOUT;
 
     private boolean followRedirects;
+    private boolean doInput = true, doOutput;
 
     public SimpleHttpRequest done() {
         return this;
@@ -81,8 +82,20 @@ public class SimpleHttpRequest implements HttpRequest {
 
     public SimpleHttpRequest path(String path) {
         Check.state(this.path != null, "path already set");
+        Check.notNull(path, "path cannot be null");
 
-        this.path = Check.notNull(path, "path cannot be null");
+        if (path.isEmpty())
+            throw new IllegalArgumentException("path cannot be empty");
+
+        if (path.charAt(0) == '/') {
+            if (path.length() == 1)
+                throw new IllegalArgumentException("path cannot consist of a single slash");
+            else
+                // Remove the leading slash to avoid requests like "example.com//path".
+                path = path.substring(1);
+        }
+
+        this.path = path;
         return this;
     }
 
@@ -151,6 +164,16 @@ public class SimpleHttpRequest implements HttpRequest {
         return this;
     }
 
+    public SimpleHttpRequest doInput(boolean doInput) {
+        this.doInput = doInput;
+        return this;
+    }
+
+    public SimpleHttpRequest doOutput(boolean doOutput) {
+        this.doOutput = doOutput;
+        return this;
+    }
+
     @Override
     public String getUserAgent() {
         Check.state(userAgent == null, "userAgent not set");
@@ -187,6 +210,16 @@ public class SimpleHttpRequest implements HttpRequest {
     @Override
     public boolean shouldFollowRedirects() {
         return followRedirects;
+    }
+
+    @Override
+    public boolean shouldDoInput() {
+        return doInput;
+    }
+
+    @Override
+    public boolean shouldDoOutput() {
+        return doOutput;
     }
 
     @Override

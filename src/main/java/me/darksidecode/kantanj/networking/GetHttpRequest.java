@@ -34,4 +34,24 @@ public class GetHttpRequest extends SimpleHttpRequest {
         return RequestMethod.GET;
     }
 
+    @Override
+    public SimpleHttpRequest doInput(boolean doInput) {
+        throw new IllegalStateException("cannot change doInput for " + getClass().getName());
+    }
+
+    @Override
+    public boolean shouldDoInput() {
+        return true;
+    }
+
+    @Override
+    public SimpleHttpRequest doOutput(boolean doOutput) {
+        throw new IllegalStateException("cannot change doOutput for " + getClass().getName());
+    }
+
+    @Override
+    public boolean shouldDoOutput() {
+        return false;
+    }
+
 }
