@@ -247,4 +247,18 @@ public class SimpleHttpRequest implements HttpRequest {
         return url.toString();
     }
 
+    public GetHttpRequest asGetRequest() {
+        if (this instanceof GetHttpRequest)
+            return (GetHttpRequest) this;
+        else
+            throw new ClassCastException("not a GET request: " + getClass().getName());
+    }
+
+    public PostHttpRequest asPostRequest() {
+        if (this instanceof PostHttpRequest)
+            return (PostHttpRequest) this;
+        else
+            throw new ClassCastException("not a POST request: " + getClass().getName());
+    }
+
 }
