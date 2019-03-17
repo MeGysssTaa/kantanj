@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package me.darksidecode.kantanj.types;
+package me.darksidecode.kantanj.wrapper;
 
 import lombok.Getter;
+import me.darksidecode.kantanj.types.Check;
 
 public class ConcurrentObject<T> {
 
