@@ -18,8 +18,11 @@ package me.darksidecode.kantanj.networking;
 
 import me.darksidecode.kantanj.types.Check;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.entity.ContentType;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -53,22 +56,32 @@ public final class Networking {
     public static final class Http {
         private Http() {}
 
+        public static String post(PostHttpRequest request) {
+            try {
+                HttpURLConnection con = openConnection(request);
+                StringBuilder response = new StringBuilder();
+
+                OutputStream outputStream = con.getOutputStream();
+                outputStream.write(request.getPostData());
+                outputStream.close();
+
+                if (request.shouldDoInput())
+                    return readResponseAndDisconnect(con, response);
+                else {
+                    con.disconnect();
+                    return null;
+                }
+            } catch (Exception ex) {
+                throw new RuntimeException("http POST request failed", ex);
+            }
+        }
+
         public static String get(GetHttpRequest request) {
             try {
                 HttpURLConnection con = openConnection(request);
                 StringBuilder response = new StringBuilder();
 
-                InputStream inputStream = con.getInputStream();
-
-                for (String line : IOUtils.readLines(inputStream, StandardCharsets.UTF_8))
-                    response.append(line).append('\n');
-
-                inputStream.close();
-                con.disconnect();
-
-                if ((response.length() > 0) && (response.charAt(response.length() - 1) == '\n'))
-                    response.deleteCharAt(response.length() - 1);
-                return response.toString();
+                return readResponseAndDisconnect(con, response);
             } catch (Exception ex) {
                 throw new RuntimeException("http GET request failed", ex);
             }
@@ -87,6 +100,14 @@ public final class Networking {
                 for (String prop : requestProps.keySet())
                     con.setRequestProperty(prop, requestProps.get(prop));
 
+                if (request instanceof PostHttpRequest) {
+                    if (!(requestProps.containsKey("Content-Type")))
+                        con.setRequestProperty("Content-Type", ContentType.APPLICATION_FORM_URLENCODED.toString());
+
+                    con.setRequestProperty("Content-Length",
+                            String.valueOf(((PostHttpRequest) request).getPostData().length));
+                }
+
                 con.setRequestProperty("User-Agent", request.getUserAgent());
                 con.setInstanceFollowRedirects(request.shouldFollowRedirects());
                 con.setConnectTimeout(request.getConnectTimeout());
@@ -99,6 +120,23 @@ public final class Networking {
             } catch (Exception ex) {
                 throw new RuntimeException("failed to establish a new connection", ex);
             }
+        }
+
+        private static String readResponseAndDisconnect(HttpURLConnection con,
+                                                        StringBuilder response) throws IOException {
+            InputStream inputStream = con.getInputStream();
+
+            for (String line : IOUtils.readLines(inputStream, StandardCharsets.UTF_8))
+                response.append(line).append('\n');
+
+            inputStream.close();
+            con.disconnect();
+
+            if ((response.length() > 0) && (response.charAt(response.length() - 1) == '\n'))
+                // Delete trailing new-line.
+                response.deleteCharAt(response.length() - 1);
+
+            return response.toString();
         }
     }
 

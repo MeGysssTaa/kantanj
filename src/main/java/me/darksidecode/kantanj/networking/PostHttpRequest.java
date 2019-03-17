@@ -16,7 +16,13 @@
 
 package me.darksidecode.kantanj.networking;
 
+import me.darksidecode.kantanj.types.Check;
+
+import java.nio.charset.StandardCharsets;
+
 public class PostHttpRequest extends SimpleHttpRequest {
+
+    private byte[] postData;
 
     @Override
     public PostHttpRequest done() {
@@ -42,6 +48,23 @@ public class PostHttpRequest extends SimpleHttpRequest {
     @Override
     public boolean shouldDoOutput() {
         return true;
+    }
+
+    public PostHttpRequest postData(byte[] postData) {
+        this.postData = Check.notNull(postData, "post data cannot be null");
+        return this;
+    }
+
+    public PostHttpRequest postUtf8Data(String postDataUtf8) {
+        postData = Check.notNull(postDataUtf8,
+                "post data cannot be null").getBytes(StandardCharsets.UTF_8);
+        return this;
+    }
+
+    public byte[] getPostData() {
+        if (postData == null)
+            throw new IllegalArgumentException("post data is not set");
+        return postData;
     }
 
 }
