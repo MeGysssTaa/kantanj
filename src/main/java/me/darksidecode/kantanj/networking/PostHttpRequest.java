@@ -16,8 +16,11 @@
 
 package me.darksidecode.kantanj.networking;
 
+import me.darksidecode.kantanj.formatting.CommonJson;
 import me.darksidecode.kantanj.types.Check;
+import org.apache.http.entity.ContentType;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 public class PostHttpRequest extends SimpleHttpRequest {
@@ -59,6 +62,11 @@ public class PostHttpRequest extends SimpleHttpRequest {
         postData = Check.notNull(postDataUtf8,
                 "post data cannot be null").getBytes(StandardCharsets.UTF_8);
         return this;
+    }
+
+    public <T extends Serializable> PostHttpRequest postJsonData(T object) {
+        requestProperty("Content-Type", ContentType.APPLICATION_JSON.toString());
+        return postUtf8Data(CommonJson.toJson(object));
     }
 
     public byte[] getPostData() {
