@@ -6,4 +6,7 @@ A simple library consisting of various handy utilities, types and wrappers for o
 
 Hope this will be useful to someone.
 
-Also hope a documentation will be published one day.
+Also hope a complete documentation will be published one day...
+
+
+> **For some partial documentation, tutorials and explanation** see [kantanj Wiki](https://github.com/MeGysssTaa/kantanj/wiki)
