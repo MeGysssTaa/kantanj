@@ -10,3 +10,21 @@ Also hope a complete documentation will be published one day...
 
 
 > **For some partial documentation, tutorials and explanation** see [kantanj Wiki](https://github.com/MeGysssTaa/kantanj/wiki)
+
+
+## Building and Installing (Maven)
+
+1. Clone or download this repository, `cd` into it.
+2. Run `mvn clean install`.
+3. Profit!
+
+```bash
+git clone https://github.com/MeGysssTaa/kantanj
+cd kantanj
+mvn clean install
+```
+
+
+## License
+
+**[Apache License 2.0](https://github.com/MeGysssTaa/kantanj/blob/master/LICENSE)**
