@@ -17,6 +17,7 @@
 package me.darksidecode.kantanj.db.mongo;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.FindIterable;
@@ -25,7 +26,6 @@ import com.mongodb.client.MongoDatabase;
 import me.darksidecode.kantanj.types.Check;
 import org.bson.Document;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -113,7 +113,8 @@ public class MongoManager implements AutoCloseable {
             for (int i = 0; i < password.length; i++)
                 password[i] = (char) 0;
 
-            client = new MongoClient(new ServerAddress(host, port), Collections.singletonList(cred));
+            client = new MongoClient(new ServerAddress(host, port), cred, MongoClientOptions.builder().build());
+            // deprecated api usage: client = new MongoClient(new ServerAddress(host, port), Collections.singletonList(cred));
 
             return this;
         } catch (Exception ex) {
