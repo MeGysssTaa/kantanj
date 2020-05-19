@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 DarksideCode
+ * Copyright 2020 DarksideCode
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package me.darksidecode.kantanj.formatting;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -56,7 +55,7 @@ public enum Hash {
     }
 
     public String checksumString(File input) {
-        return DatatypeConverter.printHexBinary(checksum(input));
+        return hex(checksum(input));
     }
 
     public byte[] checksum(byte[] input) {
@@ -71,7 +70,7 @@ public enum Hash {
     }
 
     public String checksumString(byte[] input) {
-        return DatatypeConverter.printHexBinary(checksum(input));
+        return hex(checksum(input));
     }
 
     public byte[] checksum(String input, Charset encoding) {
@@ -79,7 +78,16 @@ public enum Hash {
     }
 
     public String checksumString(String input, Charset encoding) {
-        return DatatypeConverter.printHexBinary(checksum(input, encoding));
+        return hex(checksum(input, encoding));
+    }
+
+    public static String hex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder(bytes.length * 2);
+        
+        for (byte b : bytes)
+            sb.append(String.format("%02x", b));
+        
+        return sb.toString();
     }
 
 }
