@@ -77,6 +77,14 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>reflex.public</id>
+            <name>Public Reflex Repository</name>
+            <url>https://archiva.reflex.rip/repository/public/</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <!-- IDE -->
         <dependency>

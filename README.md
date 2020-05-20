@@ -12,6 +12,42 @@ Also hope a complete documentation will be published one day...
 > **For some partial documentation, tutorials and explanation** see [kantanj Wiki](https://github.com/MeGysssTaa/kantanj/wiki)
 
 
+## Usage (Maven)
+
+```xml
+<repositories>
+    <repository>
+        <id>reflex.public</id>
+        <name>Public Reflex Repository</name>
+        <url>https://archiva.reflex.rip/repository/public/</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>me.darksidecode.kantanj</groupId>
+        <artifactId>kantanj</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+</dependencies>
+```
+
+## Usage (Gradle)
+
+```groovy
+repositories {
+    maven {
+        name 'Public Reflex Repository'
+        url 'https://archiva.reflex.rip/repository/public/'
+    }
+}
+
+dependencies {
+    compile group: 'me.darksidecode.kantanj', name: 'kantanj', version: '1.0.0'
+}
+```
+
+
 ## Building and Installing (Maven)
 
 1. Clone or download this repository, `cd` into it.
