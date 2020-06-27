@@ -24,21 +24,21 @@ import lombok.Getter;
  */
 public enum IPAPILanguage {
 
-    ENGLISH    ("en",                "English (default)"),
+    ENGLISH    ("en",                  "English (default)"),
 
-    GERMAN     ("de",                 "Deutsch (German)"),
+    GERMAN     ("de",                   "Deutsch (German)"),
 
-    SPANISH    ("es",                "Español (Spanish)"),
+    SPANISH    ("es",                  "Español (Spanish)"),
 
-    PORTUGUESE ("pt-BR", "Español - Argentina (Spanish)"),
+    PORTUGUESE ("pt-BR", "Português - Brasil (Portuguese)"),
 
-    FRENCH     ("fr",                "Français (French)"),
+    FRENCH     ("fr",                  "Français (French)"),
 
-    JAPANESE   ("ja",                 "日本語 (Japanese)"),
+    JAPANESE   ("ja",                   "日本語 (Japanese)"),
 
-    CHINESE    ("zh-CN",                 "中国 (Chinese)"),
+    CHINESE    ("zh-CN",                   "中国 (Chinese)"),
 
-    RUSSIAN    ("ru",                "Русский (Russian)")
+    RUSSIAN    ("ru",                  "Русский (Russian)")
 
     ;
 

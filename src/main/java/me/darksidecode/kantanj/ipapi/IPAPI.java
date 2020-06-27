@@ -41,7 +41,7 @@ public class IPAPI {
 
     public static final String BASE_URL = "http://ip-api.com";
 
-    private static final int MAX_REQUESTS_PER_MIN = 145;
+    private static final int MAX_REQUESTS_PER_MIN = 40; // 45 for ip-api
 
     private static final long MIN_BLOCK_MILLIS = 1000;
 

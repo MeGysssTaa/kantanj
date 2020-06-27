@@ -27,7 +27,7 @@ Also hope a complete documentation will be published one day...
     <dependency>
         <groupId>me.darksidecode.kantanj</groupId>
         <artifactId>kantanj</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </dependency>
 </dependencies>
 ```
@@ -43,7 +43,7 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'me.darksidecode.kantanj', name: 'kantanj', version: '1.0.0'
+    implementation group: 'me.darksidecode.kantanj', name: 'kantanj', version: '1.0.1'
 }
 ```
 
