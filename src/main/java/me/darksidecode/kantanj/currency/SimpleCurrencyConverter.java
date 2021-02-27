@@ -22,7 +22,6 @@ import me.darksidecode.kantanj.networking.GetHttpRequest;
 import me.darksidecode.kantanj.networking.Networking;
 import me.darksidecode.kantanj.networking.SampleUserAgents;
 import me.darksidecode.kantanj.types.Check;
-import org.apache.http.entity.ContentType;
 
 /**
  * A simple implementation of a currency converter based on https://www.currencyconverterapi.com/docs
@@ -89,7 +88,7 @@ public class SimpleCurrencyConverter implements CurrencyConverter {
                             "compact", "ultra",
                             "apiKey",   apiKey
                     ).
-                    requestProperty("Content-Type", ContentType.APPLICATION_JSON.toString()).
+                    requestProperty("Content-Type", "application/json; charset=UTF-8").
                     userAgent(SampleUserAgents.MOZILLA_WIN_NT);
 
             String response = Networking.Http.get(getRequest);

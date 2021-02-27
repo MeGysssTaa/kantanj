@@ -18,7 +18,6 @@ package me.darksidecode.kantanj.networking;
 
 import me.darksidecode.kantanj.types.Check;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.entity.ContentType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -102,7 +101,8 @@ public final class Networking {
 
                 if (request instanceof PostHttpRequest) {
                     if (!(requestProps.containsKey("Content-Type")))
-                        con.setRequestProperty("Content-Type", ContentType.APPLICATION_FORM_URLENCODED.toString());
+                        con.setRequestProperty("Content-Type",
+                                "application/x-www-form-urlencoded; charset=ISO-8859-1");
 
                     con.setRequestProperty("Content-Length",
                             String.valueOf(((PostHttpRequest) request).getPostData().length));

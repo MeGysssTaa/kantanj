@@ -28,7 +28,6 @@ import me.darksidecode.kantanj.networking.SampleUserAgents;
 import me.darksidecode.kantanj.system.Threads;
 import me.darksidecode.kantanj.time.ExpiringList;
 import me.darksidecode.kantanj.types.Check;
-import org.apache.http.entity.ContentType;
 
 import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
@@ -130,7 +129,7 @@ public class IPAPI {
                     baseUrl(BASE_URL).
                     path("json/" + ip).
                     queryParam("lang", lang.getIso639Name()).
-                    requestProperty("Content-Type", ContentType.APPLICATION_JSON.toString()).
+                    requestProperty("Content-Type", "application/json; charset=UTF-8").
                     userAgent(SampleUserAgents.MOZILLA_WIN_NT);
 
             String response = Networking.Http.get(request);
