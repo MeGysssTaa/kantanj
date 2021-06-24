@@ -22,7 +22,7 @@
 
     <groupId>me.darksidecode.kantanj</groupId>
     <artifactId>kantanj</artifactId>
-    <version>1.0.2</version>
+    <version>1.1.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -94,11 +94,11 @@
             <scope>provided</scope>
         </dependency>
         <!-- Third-party -->
-            <dependency>
+        <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
             <version>2.37.0</version>
-                <scope>provided</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

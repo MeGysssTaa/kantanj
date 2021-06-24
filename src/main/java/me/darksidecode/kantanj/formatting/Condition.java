@@ -16,8 +16,6 @@
 
 package me.darksidecode.kantanj.formatting;
 
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -62,7 +60,7 @@ public class Condition {
 
     /**
      * Makes sure this Condition and all its branches are valid,
-     * or throws a SyntaxException otherwise.
+     * or throws a CondfSyntaxException otherwise.
      *
      * If this Condition object was already validated somewhen,
      * and no of its components were changed, then validation is
@@ -81,31 +79,31 @@ public class Condition {
             pre = ""; // modifies hash code of this Condition => invaliates hash at variable h
 
         if (branches.isEmpty())
-            throw new SyntaxException("missing conditional branches");
+            throw new CondfSyntaxException("missing conditional branches");
 
         if (elseBranch == null)
-            throw new SyntaxException("missing else branch");
+            throw new CondfSyntaxException("missing else branch");
 
         if (elseBranch.result == null)
-            throw new SyntaxException("missing result at the else branch");
+            throw new CondfSyntaxException("missing result at the else branch");
 
         for (int i = 0; i < branches.size(); i++) {
             Branch branch = branches.get(i);
 
             if (branch.obj == -1)
-                throw new SyntaxException("missing " +
+                throw new CondfSyntaxException("missing " +
                         "target obj pointer at branch " + i);
 
             if (branch.op == null)
-                throw new SyntaxException("missing " +
+                throw new CondfSyntaxException("missing " +
                         "comparison operator at branch " + i);
 
             if (branch.against == null)
-                throw new SyntaxException("missing " +
+                throw new CondfSyntaxException("missing " +
                         "against obj at branch " + i);
 
             if (branch.result == null)
-                throw new SyntaxException("missing result at branch " + i);
+                throw new CondfSyntaxException("missing result at branch " + i);
         }
 
         // All fine, this Condition is safe to use
@@ -257,7 +255,8 @@ public class Condition {
          * @throws NullPointerException if the object located at the index one of the
          *                              pointers points to is null.
          *
-         * @throws SyntaxException if the object to compare against is an invalid pointer;
+         * @throws CondfSyntaxException
+         *                         if the object to compare against is an invalid pointer;
          *                             ** OR **
          *                         if the operator is set to "~" (range check), but the target
          *                         object is not a number;
@@ -300,7 +299,7 @@ public class Condition {
                 try {
                     pointer = Integer.parseInt(pointerStr);
                 } catch (NumberFormatException ex) {
-                    throw new SyntaxException("invalid pointer: " + against);
+                    throw new CondfSyntaxException("invalid pointer: " + against);
                 }
 
                 if (pointer >= args.length)
@@ -342,7 +341,7 @@ public class Condition {
             Class againstClass = (compareTo == null) ? null : compareTo.getClass();
 
             if ((compareTo != null) && (targetClass != againstClass))
-                throw new SyntaxException(String.format("types mismatch:" +
+                throw new CondfSyntaxException(String.format("types mismatch:" +
                         " cannot compare %s to %s", targetClass.getSimpleName(), againstClass.getSimpleName()));
 
             boolean match;
@@ -357,12 +356,12 @@ public class Condition {
                     double high = Double.parseDouble(limits[1]);
 
                     if (low >= high)
-                        throw new SyntaxException(String.format("low range limit must " +
+                        throw new CondfSyntaxException(String.format("low range limit must " +
                                 "be less than high range limit; low: %s, high: %s", low, high));
 
                     double tNum = ((Number) target).doubleValue();
                     match = tNum >= low && tNum <= high;
-                } else throw new SyntaxException("target object must be a number for range checks");
+                } else throw new CondfSyntaxException("target object must be a number for range checks");
             } else {
                 // It is guaranteed by a check above that compareTo
                 // is not null if the operator is not equal to "~"
@@ -381,7 +380,7 @@ public class Condition {
                     // are going to accept is strict equals ('=')
                     if (op.equals("="))
                         match = target.equals(compareTo);
-                    else throw new SyntaxException("operator " + op +
+                    else throw new CondfSyntaxException("operator " + op +
                             " is not applicable for objects of type String");
                 }
             }
@@ -392,8 +391,7 @@ public class Condition {
         /**
          * Compare the specified numbers using the operator set during parsing.
          *
-         * @throws SyntaxException if the comparison operator is not applicable
-         *                         for numbers.
+         * @throws CondfSyntaxException if the comparison operator is not applicable for numbers.
          *
          * @return true if the condition nTarget(?)nAgainst is true, where
          *         (?) is the comparison operator used; false otherwise.
@@ -419,7 +417,7 @@ public class Condition {
                     return nTarget >= nAgainst;
             }
 
-            throw new SyntaxException("operator " + op +
+            throw new CondfSyntaxException("operator " + op +
                     " is not applicable for objects of type Number");
         }
 

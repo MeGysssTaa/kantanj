@@ -16,8 +16,6 @@
 
 package me.darksidecode.kantanj.formatting;
 
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -191,8 +189,8 @@ public class ConditionalFormatter {
      * @throws IllegalArgumentException if the specified string is either
      *                                  null, empty or contains only spaces.
      *
-     * @throws SyntaxException if the specified string cannot be parsed
-     *                         by this formatter properly.
+     * @throws CondfSyntaxException if the specified string cannot be parsed
+     *                              by this formatter properly.
      */
     public ConditionalFormatter(String s) {
         if ((s == null) || (s.trim().isEmpty()))
@@ -210,7 +208,7 @@ public class ConditionalFormatter {
 
                 if (openingQuote) {
                     if (i == (chars.length - 1))
-                        throw new SyntaxException("unclosed quote at char " + (i + 1));
+                        throw new CondfSyntaxException("unclosed quote at char " + (i + 1));
 
                     // parseCondition tells the loop to skip some
                     // subsequent chars which it has already parsed
@@ -222,7 +220,7 @@ public class ConditionalFormatter {
         }
 
         if (openingQuote)
-            throw new SyntaxException("unclosed quote at char " + (lastQuotePos + 1));
+            throw new CondfSyntaxException("unclosed quote at char " + (lastQuotePos + 1));
 
         if (pre.length() > 0)
             // Free chars that were not bound to any conditions.
@@ -240,8 +238,8 @@ public class ConditionalFormatter {
      * @param start condition start position.
      * @param pre condition prefix.
      *
-     * @throws SyntaxException if this condition's syntax is invalid
-     *                         and cannot be parsed.
+     * @throws CondfSyntaxException if this condition's syntax is invalid
+     *                              and cannot be parsed.
      *
      * @return the number of characters to skip after parse.
      */
@@ -283,7 +281,7 @@ public class ConditionalFormatter {
             }
         }
 
-        throw new SyntaxException("unterminated condition at char " + (start + 1));
+        throw new CondfSyntaxException("unterminated condition at char " + (start + 1));
     }
 
     /**
@@ -294,8 +292,8 @@ public class ConditionalFormatter {
      * @param start condition start position.
      * @param pos position of the current token.
      *
-     * @throws SyntaxException if this conditional branch's syntax
-     *                         is invalid and cannot be parsed.
+     * @throws CondfSyntaxException if this conditional branch's syntax
+     *                              is invalid and cannot be parsed.
      */
     private void parseExpectingObj(char ic, int start, int pos) {
         if (ic == '*') {
@@ -306,7 +304,7 @@ public class ConditionalFormatter {
         else if (appendCurNum) {
             if (ic == '}') {
                 if (curNum.length() == 0)
-                    throw new SyntaxException("empty pointer" +
+                    throw new CondfSyntaxException("empty pointer" +
                             " at char " + (start + 1 + pos + 1));
 
                 curBranch.obj = Integer.parseInt(curNum.toString());
@@ -316,7 +314,7 @@ public class ConditionalFormatter {
                 state = EXPECTING_CONDITION;
             } else {
                 if (!(Character.isDigit(ic)))
-                    throw new SyntaxException("invalid non-int " +
+                    throw new CondfSyntaxException("invalid non-int " +
                             "pointer at char " + (start + 1 + pos + 1));
 
                 curNum.append(ic);
@@ -333,8 +331,8 @@ public class ConditionalFormatter {
      * @param start condition start position.
      * @param pos position of the current token.
      *
-     * @throws SyntaxException if this conditional branch's syntax
-     *                         is invalid and cannot be parsed.
+     * @throws CondfSyntaxException if this conditional branch's syntax
+     *                              is invalid and cannot be parsed.
      */
     private void parseExpectingCondition(char ic, int start, int pos) {
         boolean operatorChar = OPS.indexOf(ic) != -1;
@@ -356,18 +354,18 @@ public class ConditionalFormatter {
                 boolean validChar = ic == '.' || ic == ':' || Character.isDigit(ic);
 
                 if (!(validChar))
-                    throw new SyntaxException(String.format("illegal " +
+                    throw new CondfSyntaxException(String.format("illegal " +
                             "symbol %s in range spec at char %s", ic, start + 1 + pos + 1));
 
                 if ((rangeSpecState == EXPECT_RANGE_START) && (ic == '.')) {
                     if (prevCharDigit)
                         rangeSpecState = EXPECT_ONE_DOT; // range start found; expect one more dot (".")
-                    else throw new SyntaxException("expected range " +
+                    else throw new CondfSyntaxException("expected range " +
                             "start number at char " + (start + 1 + pos + 1));
                 } else if (rangeSpecState == EXPECT_ONE_DOT) {
                     if (ic == '.')
                         rangeSpecState = EXPECT_RANGE_END;
-                    else throw new SyntaxException("expected range " +
+                    else throw new CondfSyntaxException("expected range " +
                             "start/end separator \"..\" at char " + (start + 1 + pos + 1));
                 } else if (rangeSpecState == EXPECT_RANGE_END) {
                     // It is guaranteed by a check above that this is either
@@ -375,7 +373,7 @@ public class ConditionalFormatter {
                     // range spec we expect nothing but a colon identifying
                     // start of the expression (result) itself
                     if (ic == '.')
-                        throw new SyntaxException("expected colon \":\" " +
+                        throw new CondfSyntaxException("expected colon \":\" " +
                                 "at the end of range spec at char " + (start + 1 + pos + 1));
 
                     // Now it is guaranteed that the char
@@ -392,7 +390,7 @@ public class ConditionalFormatter {
                             against = new StringBuilder();
 
                             state = EXPECTING_RESULT;
-                        } else throw new SyntaxException("expected range " +
+                        } else throw new CondfSyntaxException("expected range " +
                                 "end number at char " + (start + 1 + pos + 1));
                     }
                 }
@@ -401,7 +399,7 @@ public class ConditionalFormatter {
             // Check whether we need to set the op...
             if (curBranch.op == null) {
                 if (op.length() == 0)
-                    throw new SyntaxException("empty " +
+                    throw new CondfSyntaxException("empty " +
                             "comparison operator at char " + (start + 1 + pos + 1));
 
                 curBranch.op = op.toString();
@@ -411,7 +409,7 @@ public class ConditionalFormatter {
             // ...and if not, then we need to set the against obj
             if (ic == ':') {
                 if (against.length() == 0)
-                    throw new SyntaxException("nothing to " +
+                    throw new CondfSyntaxException("nothing to " +
                             "compare to at char " + (start + 1 + pos + 1));
 
                 curBranch.against = against.toString();
@@ -430,19 +428,19 @@ public class ConditionalFormatter {
      * @param start condition start position.
      * @param pos position of the current token.
      *
-     * @throws SyntaxException if this conditional branch's syntax
-     *                         is invalid and cannot be parsed.
+     * @throws CondfSyntaxException if this conditional branch's syntax
+     *                              is invalid and cannot be parsed.
      */
     private int parseExpectingResult(char ic, int start, int pos) {
         if (ic == '|') {
             if (elseBranch)
-                throw new SyntaxException("else branch must be the last branch of " +
+                throw new CondfSyntaxException("else branch must be the last branch of " +
                         "a condition: unexpected OR operator at char " + (start + 1 + pos + 1));
 
             String r = result.toString().trim();
 
             if (r.isEmpty())
-                throw new SyntaxException("expected " +
+                throw new CondfSyntaxException("expected " +
                         "result at char " + (start + 1 + pos + 1));
 
             curBranch.result = r;
@@ -455,13 +453,13 @@ public class ConditionalFormatter {
         } else if (ic == '\'') {
             // End of condition
             if (!(elseBranch))
-                throw new SyntaxException("illegal condition end: " +
+                throw new CondfSyntaxException("illegal condition end: " +
                         "missing else branch at char " + (start + 1 + pos + 1));
 
             String r = result.toString().trim();
 
             if (r.isEmpty())
-                throw new SyntaxException("expected " +
+                throw new CondfSyntaxException("expected " +
                         "result at char " + (start + 1 + pos + 1));
 
             // register closing quote
@@ -502,7 +500,7 @@ public class ConditionalFormatter {
 
             if (next == '\'') {
                 if (j == (start + 1))
-                    throw new SyntaxException("empty " +
+                    throw new CondfSyntaxException("empty " +
                             "condition at char " + (start + 1));
 
                 break; // stop appending inner: reached end of condition
